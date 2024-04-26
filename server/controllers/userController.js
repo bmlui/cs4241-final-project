@@ -96,10 +96,36 @@ const getUserByID = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  console.log(req.user);
+  if (!req.user) {
+    console.log("User not logged in.");
+    return res
+      .status(401).json({ error: "You must be logged in to update a user." });
+  }
+  try {
+    //Body with potentail new information
+    const data = await {
+      displayName: req.body.displayName,
+      description: req.body.description
+    };
+    console.log(data);
+    
+    await User.findByIdAndUpdate(req.user._id, data)
+    return res.status(200).json({message: "User updated successfully!"})
+    
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while updating the user." });
+  }
+};
+
 module.exports = {
   getUser,
   searchUser,
   getContacts,
   getUserByID,
   addUser,
+  updateUser,
 };

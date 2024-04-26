@@ -20,6 +20,7 @@ passport.use(
             githubId: profile.id,
             username: profile.username,
             displayName: profile.displayName,
+            description: "Default Description",
             profileUrl: profile.profileUrl,
             avatarUrl: profile.photos[0].value,
             location: profile._json.location,

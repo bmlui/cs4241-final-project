@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
   }, // the user's github id
   username: String, // the user's github username (will be unique)
   displayName: String, // the user's name
+  description:{
+    type: String,
+    default: "Description",
+  }, // user description
   profileUrl: String, // url to the user's github profile
   avatarUrl: String, // url to the user's github avatar
   location: String, // the user's location
