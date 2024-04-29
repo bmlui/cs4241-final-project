@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "Description",
   }, // user description
+  settings: {
+    color: String,
+    darkMode: Boolean,
+    anonymous: Boolean,
+  },
   profileUrl: String, // url to the user's github profile
   avatarUrl: String, // url to the user's github avatar
   location: String, // the user's location

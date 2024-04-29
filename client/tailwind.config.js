@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -10,6 +11,7 @@ export default {
       colors: {
         "dark-purple": "#4b0082",
         "light-purple": "#800080",
+
       },
     },
   },

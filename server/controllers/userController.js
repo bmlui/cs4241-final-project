@@ -107,7 +107,8 @@ const updateUser = async (req, res) => {
     //Body with potentail new information
     const data = await {
       displayName: req.body.displayName,
-      description: req.body.description
+      description: req.body.description,
+      settings: req.body.settings,
     };
     console.log(data);
     

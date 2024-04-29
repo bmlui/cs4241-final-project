@@ -21,6 +21,11 @@ passport.use(
             username: profile.username,
             displayName: profile.displayName,
             description: "Default Description",
+            settings: {
+              color: "bg-indigo",
+              darkMode: false,
+              anonymous: false,
+            },
             profileUrl: profile.profileUrl,
             avatarUrl: profile.photos[0].value,
             location: profile._json.location,
