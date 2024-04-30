@@ -44,7 +44,7 @@ export const ConversationItem = ({
       </div>
       <button
         onClick={() => handleDeleteConversation(conversation._id)}
-        className="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-xl"
+        className="ml-auto btn-primary bg-red text-white font-bold py-1 px-2 rounded-xl"
       >
         Delete
       </button>

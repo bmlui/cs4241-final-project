@@ -26,9 +26,9 @@ passport.use(
             location: profile._json.location,
             bio: "Default Bio",
             colors: {
-              mainColor: "bg-red",
-              darkColor: "bg-red-dark",
-              lightColor: "bg-red-light",
+              mainColor: "purple",
+              darkColor: "purple-dark",
+              lightColor: "purple-light",
             },
             contacts: [],
           });

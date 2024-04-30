@@ -9,7 +9,10 @@
     @apply text-2xl font-bold;
   }
   .btn-primary {
-    @apply font-bold bg-purple text-white py-2 px-4 rounded-2xl hover:bg-purple-dark transition duration-200 ease-in-out;
+    @apply font-bold text-white py-2 px-4 rounded-2xl transition duration-200 ease-in-out;
+  }
+  .btn-primary:hover {
+    @apply bg-opacity-70 text-white;
   }
 }
 @tailwind utilities;
@@ -21,7 +24,6 @@
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
-
 
 h1 {
   @apply text-2xl font-bold mb-4;

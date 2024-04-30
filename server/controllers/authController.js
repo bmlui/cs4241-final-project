@@ -16,7 +16,7 @@ const githubCallback = (req, res, next) => {
 
   passport.authenticate(
     "github",
-    { failureRedirect: "/login" },
+    { failureRedirect: redirectUrl },
     (err, user, info) => {
       if (err) {
         console.log(err);

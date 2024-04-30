@@ -135,11 +135,12 @@ export const Chat = () => {
     <div className="flex flex-grow m-7 ml-0">
       <div className="flex flex-col flex-grow mr-7 w-1/2">
         <button
-          className={"btn-primary mb-7 rounded-xl w-full h-1/7" + " bg-" + `${user?.colors.mainColor}` + " hover:bg-" + `${user?.colors.darkColor}`}
+          className={`btn-primary mb-7 rounded-xl w-full h-1/7 bg-${user?.colors.mainColor} hover:bg-${user?.colors.darkColor}`}
           onClick={() => setShowModal(true)}
         >
           New Conversation
         </button>
+
         <GroupList
           groupConversations={groupConversations}
           currentConversation={currentConversation}

@@ -1,120 +1,78 @@
+import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import "./Sidebar.css"
 import axios from "axios";
-import React, { useState, useEffect } from 'react';
-import { BlockPicker, ChromePicker, GithubPicker } from 'react-color';
+import { GithubPicker } from "react-color";
+import { toast } from "react-toastify";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const Settings = () => {
-  const {user} = useAuth();
-  const [color, setColor] = useState('#ffffff'); // Initial color state
-  
+  const { user } = useAuth();
+  const [color, setColor] = useState("#ffffff");
 
-
-  const handleColorChange = async (newColor) => {
-    setColor(newColor.hex)
-    // setColors();
-    await updateUser(getColorName(newColor.hex));
-    
+  const colorOptions = {
+    "#a855f7": "purple",
+    "#93c5fd": "blue",
+    "#4338ca": "indigo",
+    "#f9a8d4": "pink",
+    "#ef4444": "red",
+    "#f97316": "orange",
+    "#ffc107": "yellow",
+    "#a3e635": "green",
+    "#14b8a6": "teal",
+    "#22d3ee": "cyan",
   };
-  
-  function getColorName(colorCode) {
-    let colorName;
-    switch (colorCode) {
-      case '#a855f7':
-        colorName = 'purple';
-        break;
-      case '#93c5fd':
-        colorName = 'blue';
-        break;
-      case '#4338ca':
-        colorName = 'indigo';
-        break;
-      case '#f9a8d4':
-        colorName = 'pink';
-        break;
-      case '#ef4444':
-        colorName = 'red';
-        break;
-      case '#f97316':
-        colorName = 'orange';
-        break;
-      case '#ffc107':
-        colorName = 'yellow';
-        break;
-      case '#a3e635':
-        colorName = 'green';
-        break;
-      case '#14b8a6':
-        colorName = 'teal';
-        break;
-      case '#22d3ee':
-        colorName = 'cyan';
-        break;
-    }
-     return colorName;
-  }
 
-  const updateUser = async (newColor) => {
-    // console.log(document.getElementById('color-picker').color)
+  const getColorName = (colorCode) => colorOptions[colorCode] || "white";
 
-    console.log(newColor)
+  const updateUser = async (colorName) => {
     try {
-        
-      // make post request here
-      const response = await axios.post(`${API_URL}/user/updateSettings`,
-          {
-            colors: {
-              mainColor:  newColor,
-              darkColor:  newColor + "-dark",
-              lightColor: newColor + "-light",
-            }
-          },
-          {
-            withCredentials: true,
-          }
-        );
-
+      await axios.post(`${API_URL}/user/update/settings`, {
+        colors: {
+          mainColor: colorName,
+          darkColor: `${colorName}-dark`,
+          lightColor: `${colorName}-light`,
+        },
+      });
+      toast.success(`User settings updated successfully.`);
     } catch (error) {
-      console.error("Error Updating users:" + error)
+      console.error("Error updating user settings:", error);
     }
-  }
+  };
 
-  
+  const handleColorChange = async (color) => {
+    setColor(color.hex);
+    await updateUser(getColorName(color.hex));
+  };
 
-  useEffect(() => {
-    // Code to run on page load
-    console.log('Component has mounted');
-    //setColors();
-    
-
-    // Clean-up function (optional)
-    return () => {
-      console.log('Component will unmount');
-    };
-  }, []);
+  const handleDeleteUser = async () => {
+    try {
+      // Placeholder for delete user functionality
+      toast.error("Delete user functionality is not implemented yet.");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
-    <div className="m-auto bg-white rounded-lg shadow-lg p-4 overflow-auto">
-     <div>
-       <h1 className="panel-header mb-2">Select a Color</h1>
-       <GithubPicker id="color-picker"
-       width="140px"
-       colors={[
-         /*$blue:  */  "#93c5fd",
-         /*$indigo:*/  "#4338ca",
-         /*$pink:  */  "#f9a8d4",
-         /*$purple:*/  "#a855f7",
-         /*$red:   */  "#ef4444",
-         /*$orange:*/  "#f97316",
-         /*$yellow:*/  "#ffc107",
-         /*$green: */  "#a3e635",
-         /*$teal:  */  "#14b8a6",
-         /*$cyan:  */  "#22d3ee",
-       ]}
-           color={color} onChange={handleColorChange} />
-     </div>
-  </div>
+    <div className="panel flex-grow m-7 ml-0 bg-white rounded-2xl shadow-lg p-4 overflow-auto">
+      <h1 className="panel-header mb-2">Settings</h1>
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold">Select a Color</h2>
+        <GithubPicker
+          width="140px"
+          colors={Object.keys(colorOptions)}
+          color={color}
+          onChangeComplete={handleColorChange}
+        />
+      </div>
+      <button onClick={handleDeleteUser} className="btn-primary bg-red">
+        Delete User
+      </button>
+      <p className="text-sm text-gray-500 mt-2">
+        Note: Please refresh the page after changing the color to see the
+        changes applied.
+      </p>
+    </div>
   );
-  
 };

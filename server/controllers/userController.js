@@ -41,7 +41,7 @@ const addUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUserProfile = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: "You must be logged in." });
   }
@@ -167,6 +167,7 @@ const updateSettings = async (req, res) => {
     user.colors.darkColor = data.darkColor;
     user.colors.lightColor = data.lightColor;
     await User.findByIdAndUpdate(req.user._id, data);
+    res.json({ message: "User settings updated successfully." });
   } catch (error) {
     console.error(error);
     res
@@ -175,23 +176,13 @@ const updateSettings = async (req, res) => {
   }
 };
 
-const getSettings = async (req, res) => {
-  console.log("marking req");
-  const user = await User.findById(req.user._id);
-  if (!user) {
-    return res.status(404).json({ error: "User not found." });
-  }
-  res.status(200).json(user.colors);
-};
-
 module.exports = {
   getUser,
   searchUser,
   getContacts,
   getUserByID,
   addUser,
-  updateUser,
+  updateUserProfile,
   removeUser,
   updateSettings,
-  getSettings,
 };

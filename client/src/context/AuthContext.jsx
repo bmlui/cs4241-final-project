@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.get(`${API_URL}/user`);
       setUser(res.data.user);
-      console.log("User data: ", res.data.user);
       setLoading(false);
     } catch (err) {
       setError(err.response.data.error);
