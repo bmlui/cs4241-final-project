@@ -1,7 +1,7 @@
 const passport = require("passport");
 const GitHubStrategy = require("passport-github").Strategy;
 const User = require("../models/userModel");
-const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 passport.use(
   new GitHubStrategy(
@@ -14,8 +14,6 @@ passport.use(
       try {
         let user = await User.findOne({ githubId: profile.id });
         if (!user) {
-          // make a new user
-          // if displayName is null, use the username
           if (!profile.displayName) {
             profile.displayName = profile.username;
           }
@@ -34,31 +32,15 @@ passport.use(
             },
             contacts: [],
           });
+          await user.save();
         }
-        done(null, user);
+
+        return done(null, user);
       } catch (error) {
-        console.error(error);
         done(error);
       }
     }
   )
 );
 
-// saves the user id to the session
-passport.serializeUser((user, done) => {
-  console.log("Serializing user, " + user._id);
-  done(null, user._id);
-});
-
-// retrieves the user id from the session
-passport.deserializeUser((id, done) => {
-  console.log("Deserializing user, " + id);
-  User.findById(id)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((err) => {
-      console.error(err);
-      done(err);
-    });
-});
+// Not using session serialization methods anymore

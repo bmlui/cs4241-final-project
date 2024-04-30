@@ -1,10 +1,8 @@
-// AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const AuthContext = createContext();
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -12,49 +10,35 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchUser(); // Fetch user data when the component mounts
-  }, []); // Run this effect only once on component mount
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get(`${API_URL}/user`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/user`);
       setUser(res.data.user);
+      console.log("User data: ", res.data.user);
       setLoading(false);
     } catch (err) {
-      setError(err);
+      setError(err.response.data.error);
       setLoading(false);
     }
   };
 
-  const updateUser = async () => {
-    setLoading(true); // Set loading state to true before fetching data
-    try {
-      const res = await axios.get(`${API_URL}/user`, {
-        withCredentials: true,
-      });
-      setUser(res.data.user);
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
+  const logout = () => {
+    localStorage.removeItem("jwt");
+    delete axios.defaults.headers.common["Authorization"];
+    setUser(null);
   };
 
-  const editUser = async (data) => {
-    setLoading(true);
-    try {
-      const res = await axios.put(`${API_URL}/user/update`, data, {
-        withCredentials: true,
-      });
-      setUser(res.data.user);
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
-  };
   return (
-    <AuthContext.Provider value={{ user, loading, error, updateUser, editUser }}>
+    <AuthContext.Provider value={{ user, fetchUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

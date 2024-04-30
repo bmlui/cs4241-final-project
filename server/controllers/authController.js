@@ -1,6 +1,5 @@
-// authController.js
-
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 // Function to handle GitHub authentication
 const githubAuth = (req, res, next) => {
@@ -14,9 +13,10 @@ const githubCallback = (req, res, next) => {
     process.env.NODE_ENV === "production"
       ? process.env.PROD_FRONTEND_ORIGIN
       : process.env.DEV_FRONTEND_ORIGIN;
+
   passport.authenticate(
     "github",
-    { failureRedirect: redirectUrl },
+    { failureRedirect: "/login" },
     (err, user, info) => {
       if (err) {
         console.log(err);
@@ -26,33 +26,24 @@ const githubCallback = (req, res, next) => {
         console.log("User not found");
         return res.redirect(redirectUrl);
       }
-      req.logIn(user, (err) => {
-        if (err) {
-          console.log(err);
-          return res.status(401).json({ error: "Login failed" });
-        }
-        console.log(`Redirecting to ${redirectUrl}`);
-        res.redirect(redirectUrl);
-      });
+      // User is authenticated, now issue a JWT
+      const token = jwt.sign(
+        {
+          id: user._id, // Ensure your user model has a unique identifier field
+          username: user.username,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" } // Token valid for 1 hour
+      );
+
+      // Redirect to frontend with token
+      console.log(`Redirecting to ${redirectUrl} with token.`);
+      res.redirect(`${redirectUrl}?token=${token}`);
     }
   )(req, res, next);
-};
-
-// Function to handle logout
-// Function to handle logout
-const logout = (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return res.status(500).json({ error: "Logout failed" });
-    }
-
-    // Respond with a success message
-    return res.status(200).json({ message: "Logout successful" });
-  });
 };
 
 module.exports = {
   githubAuth,
   githubCallback,
-  logout,
 };

@@ -6,6 +6,5 @@ const authController = require("../controllers/authController"); // Adjust the p
 
 router.get("/github", authController.githubAuth);
 router.get("/github/callback", authController.githubCallback);
-router.get("/logout", authController.logout);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const getUser = (req, res) => {
   if (!req.user) {
     return res.json({ message: "No user is logged in." });
   }
+  console.log("User data: ", req.user);
   res.json({
     user: req.user,
     message: `${req.user.username} is logged in.`,
@@ -154,18 +155,18 @@ const getUserByID = async (req, res) => {
 
 const updateSettings = async (req, res) => {
   const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found." });
+  }
   try {
     const data = await {
       colors: req.body.colors,
-    }
+    };
     console.log(data);
     user.colors.mainColor = data.mainColor;
     user.colors.darkColor = data.darkColor;
     user.colors.lightColor = data.lightColor;
-    await User.findByIdAndUpdate(req.user._id, data)
+    await User.findByIdAndUpdate(req.user._id, data);
   } catch (error) {
     console.error(error);
     res
@@ -175,12 +176,12 @@ const updateSettings = async (req, res) => {
 };
 
 const getSettings = async (req, res) => {
-  console.log("marking req")
+  console.log("marking req");
   const user = await User.findById(req.user._id);
   if (!user) {
     return res.status(404).json({ error: "User not found." });
   }
-  res.status(200).json(user.colors)
+  res.status(200).json(user.colors);
 };
 
 module.exports = {

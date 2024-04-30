@@ -13,18 +13,15 @@ import {
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
 
-
-
-
 const SidebarItem = ({ icon: Icon, label, onClick, selected, user }) => (
-
-
-<button
-  onClick={onClick}
-  className={`sidebar-item ${
-    selected ? `bg-${user?.colors.darkColor} text-white` : "sidebar-item-unselected"
-  } flex items-center justify-between`}
->
+  <button
+    onClick={onClick}
+    className={`sidebar-item ${
+      selected
+        ? `bg-${user?.colors.darkColor} text-white`
+        : "sidebar-item-unselected"
+    } flex items-center justify-between`}
+  >
     <div className="flex items-center p-8">
       <Icon className="h-10 w-10 ml-2 mr-3" />
       <span
@@ -50,24 +47,16 @@ const SidebarItem = ({ icon: Icon, label, onClick, selected, user }) => (
 
 // Logout user
 const handleLogout = () => {
-  axios
-    .get(`${API_URL}/auth/logout`, {
-      withCredentials: true,
-    })
-    .then(() => {
-      window.location.href = window.location.href; // reload the page
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // delete the token from local storage
+  localStorage.removeItem("jwt");
+  window.location.href = window.location.href;
 };
 
 export const Sidebar = ({ currentPage, setPage }) => {
   const { user } = useAuth();
-  
 
   return (
-    <aside className={"sidebar bg-" + `${user?.colors.mainColor}`} >
+    <aside className={"sidebar bg-" + `${user?.colors.mainColor}`}>
       <img
         className="profile-img"
         src={`${user?.avatarUrl}`}
@@ -104,8 +93,7 @@ export const Sidebar = ({ currentPage, setPage }) => {
           icon={ArrowLeftStartOnRectangleIcon}
           onClick={handleLogout}
         />
-        
-        </div>
+      </div>
     </aside>
   );
 };
